@@ -237,6 +237,44 @@
     ```
 
 
+* 查询客户（列表）
+
+  - `POST /api/custom/list`
+
+  * 请求参数：
+    ```json
+    # 类型  |  默认值  |  是否必填
+    # str  | None(没有默认值填None)  | yes
+    {
+      "page": 1, # int | 1  | no
+      "length": 20, # int | 20 | no
+      "status": "normal", # str | None | no 
+      "search": "123" # str | None | no
+    }
+    ```
+    
+  * 响应结果：
+    ```json
+    {
+        "result": [{
+            "cid": 1004,
+            "name": "zhang123",
+            "address": "city_a xxx",
+            "phone": "13288885555",
+            "ctype": "A", 
+            "class_priv": "O",
+            "status": "normal",
+            "remark": "xxxxxxx",
+            "insert_tm": "2015-21-23 12:23:21"
+            },
+            ....
+        ]
+    }
+    ```
+
+
+
+
 * 添加客户
 
   - `POST /api/custom/add`
@@ -260,6 +298,40 @@
     ```json
     {
       "result": "Success"
+    }
+    ```
+
+
+
+
+* 获取客户信息
+
+  - `GET /api/custom/info`
+
+  * 请求参数：
+    ```json
+    # 类型  |  默认值  |  是否必填
+    # str  | None(没有默认值填None)  | yes
+    {
+      "cid": 1002
+    }
+    ```
+    
+  * 响应结果：
+
+    ```json
+    {
+      "result": {
+            "cid": 1004,
+            "name": "zhang123",
+            "address": "city_a xxx",
+            "phone": "13288885555",
+            "ctype": "A", 
+            "class_priv": "O",
+            "status": "normal",
+            "remark": "xxxxxxx",
+            "insert_tm": "2015-21-23 12:23:21"
+            },}
     }
     ```
 

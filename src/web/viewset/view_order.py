@@ -98,7 +98,8 @@ class ViewApiOrderAdd(ViewBase):
     def __init__(self):
         self._rDict = {
             "cid": {'n': "cId", 't': int, 'v': None},
-            "order_tm": {'n': "order_tm", 't': str, 'v': None},
+            "otype": {'n': "otype", 't': str, 'v': None},
+            "order_tm": {'n': "order_tm", 't': str, 'v': ''},
             "start_tm": {'n': "start_tm", 't': str, 'v': None},
             "end_tm": {'n': "end_tm", 't': str, 'v': None},
             "amount": {'n': "amount", 't': str, 'v': None},
@@ -119,7 +120,7 @@ class ViewApiOrderAdd(ViewBase):
         if not is_admin:
             return False, 'No permission to do this'
 
-        return HjsOrder.order_add(self.cId, self.order_tm, self.start_tm, self.end_tm, self.amount, self.cash, self.remark)
+        return HjsOrder.order_add(self.cId, self.otype, self.order_tm, self.start_tm, self.end_tm, self.amount, self.cash, self.remark)
 
     def POST(self):
         bRet, sRet = self.check_login()
@@ -130,7 +131,7 @@ class ViewApiOrderAdd(ViewBase):
             Log.err("deal_order_add: %s" % (str(sRet)))
             return self.make_error(sRet)
 
-        return self.make_response(sRet)
+        return self.make_response(ViewBase.RetMsg.MSG_SUCCESS)
 
 
 class ViewApiOrderDel(ViewBase):
@@ -163,7 +164,7 @@ class ViewApiOrderDel(ViewBase):
             Log.err("deal_order_del: %s" % (str(sRet)))
             return self.make_error(sRet)
 
-        return self.make_response(sRet)
+        return self.make_response(ViewBase.RetMsg.MSG_SUCCESS)
 
 
 class ViewApiOrderPauseList(ViewBase):
@@ -216,7 +217,7 @@ class ViewApiOrderPauseAdd(ViewBase):
             Log.err("deal_pause_order_add: %s" % (str(sRet)))
             return self.make_error(sRet)
 
-        return self.make_response(sRet)
+        return self.make_response(ViewBase.RetMsg.MSG_SUCCESS)
 
 
 class ViewApiOrderPauseDel(ViewBase):
@@ -251,7 +252,7 @@ class ViewApiOrderPauseDel(ViewBase):
             Log.err("deal_pause_order_del: %s" % (str(sRet)))
             return self.make_error(sRet)
 
-        return self.make_response(sRet)
+        return self.make_response(ViewBase.RetMsg.MSG_SUCCESS)
 
 
 

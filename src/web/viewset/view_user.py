@@ -27,6 +27,16 @@ class ViewUserAdd(ViewBase):
         return render.user_add()
 
 
+class ViewUserEdit(ViewBase):
+    def GET(self):
+        if not self.check_login():
+            Log.err("user not login!")
+            return web.seeother("/login")
+        
+        return render.user_edit()
+
+
+
 class ViewApiUserList(ViewBase):
     def _deal_user_list(self):
         bRet, is_admin = HjsUser.is_admin(self.get_user_name())
@@ -56,7 +66,7 @@ class ViewApiUserAdd(ViewBase):
             "username": {'n': 'userName', 't': str, 'v': None},
             "password": {'n': 'passWord', 't': str, 'v': None},
             "phone": {'n': 'Phone', 't': str, 'v': None},
-            "email": {'n': 'Email', 't': str, 'v': None},
+            "email": {'n': 'Email', 't': str, 'v': ''},
             "priv": {'n': 'Priv', 't': int, 'v': 1}
         }
 
@@ -88,6 +98,43 @@ class ViewApiUserAdd(ViewBase):
         return self.make_response(ViewBase.RetMsg.MSG_SUCCESS)
 
 
+class ViewApiUserInfo(ViewBase):
+    def __init__(self):
+        self._rDict = {
+            "uid": {'n': 'uId', 't': int, 'v': None}
+        }
+    
+    def _check_param(self):
+        bRet, sRet = super(ViewApiUserInfo, self)._check_param()
+        if not bRet:
+            return bRet, sRet
+        
+        return True, None
+
+    def _deal_user_info(self):
+        bRet, is_admin = HjsUser.is_admin(self.get_user_name())
+        if not bRet:
+            return False, sRet
+        if not is_admin:
+            return False, 'No permission do user info'
+        bRet, user_id =  HjsUser.get_user_uid(self.get_user_name())
+        if not bRet:
+            return False, user_id
+
+        return HjsUser.user_info(self.uId)
+
+    def GET(self):
+        if not self.check_login():
+            return self.make_error("user not login")
+
+        bRet, sRet = self.process(self._deal_user_info)
+        if not bRet:
+            Log.err("deal_user_info: %s" % (str(sRet)))
+            return self.make_error(sRet)
+
+        return self.make_response(sRet)
+
+
 class ViewApiUserUpdate(ViewBase):
     def __init__(self):
         self._rDict = {
@@ -96,7 +143,7 @@ class ViewApiUserUpdate(ViewBase):
             "username": {'n': 'userName', 't': str, 'v': None},
             "password": {'n': 'passWord', 't': str, 'v': None},
             "phone": {'n': 'Phone', 't': str, 'v': None},
-            "email": {'n': 'Email', 't': str, 'v': None},
+            "email": {'n': 'Email', 't': str, 'v': ''},
             "priv": {'n': 'Priv', 't': str, 'v':None}
         }
 

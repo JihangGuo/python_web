@@ -44,7 +44,7 @@ class HjsOrderDao:
     def insert_node(cId, name, otype, order_tm, start_tm, end_tm, amount, cash, remark):
 
         dataBase = DataBase()
-        sql = "insert into tb_order(cid, name, otype, order_tm, start_tm, end_tm, amount. cash, remark) " \
+        sql = "insert into tb_order(cid, name, otype, order_tm, start_tm, end_tm, amount, cash, remark, insert_tm) " \
               "values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         param = (cId, name, otype, order_tm, start_tm, end_tm, amount, cash, remark, get_cur_time())
 
@@ -114,6 +114,18 @@ class HjsOrderDao:
             return True, 0
 
         return True, sRet[0]['cnt']
+
+    @staticmethod
+    def query_node_by_oid(oId):
+        dataBase = DataBase()
+        sql = "select * from tb_order where oid = %s"
+        param = (oId, )
+
+        bRet, sRet = dataBase.query_data(sql, param)
+        if (not bRet) or (len(sRet) != 1):
+            return False, sRet
+        
+        return True, sRet[0]
 
 
     @staticmethod
